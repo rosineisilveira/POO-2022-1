@@ -4,9 +4,10 @@ using Aula_06.DOMAIN;
 
 namespace Aula_06.DATA
 {
-    public class CobrancaRepository
+    public class ClienteRepository
     {
         private List<Cliente>ListaDeClientes = new List<Cliente>();
+        //private List<Conta>contaCliente = new List<Conta>();
 
         public List<Cliente> GetAllCliente()
         {
@@ -46,6 +47,9 @@ namespace Aula_06.DATA
         {
              return ListaDeClientes.Any(p => p.Id ==idCliente );
         }
+       
+
+
 
       
     }

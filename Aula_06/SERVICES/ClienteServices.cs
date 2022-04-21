@@ -5,25 +5,39 @@ using Aula_06.DOMAIN;
 
 namespace Aula_06.SERVICES
 {
-    public class CobrancaServices
+    public class ClienteServices
     {
-        CobrancaRepository financeiro = new CobrancaRepository();
+        ClienteRepository consumidor = new ClienteRepository();
+        
 
         public  bool Validar( int idCliente )
         {
-            return financeiro.ValidationCliente(idCliente);
+            return consumidor.ValidationCliente(idCliente);
         }
 
         public int TamanholistaCliente()
         {
-           return financeiro.GetAllCliente().Count ;
+           return consumidor.GetAllCliente().Count ;
         }
        
 
         public string CreateCliente(int id ,string nome,string fone)
         {
+            var validando = consumidor.ValidationCliente(id);
+            
+                {
+                    if(validando == false)
+                    {
+                       consumidor.SaveCliente(new Cliente(id,nome,fone));
 
-            financeiro.SaveCliente(new Cliente(id,nome,fone));
+                    }
+                    else
+                    {
+                        return " ID já utilizado,tente outro !!!";
+                    }
+                }
+
+           
 
             return "Add com sucesso";   
         }
@@ -31,7 +45,7 @@ namespace Aula_06.SERVICES
         public string ListClientes()
         {
             var builder = new StringBuilder();
-            var listaClientes = financeiro.GetAllCliente();
+            var listaClientes = consumidor.GetAllCliente();
             var qtdClientes = TamanholistaCliente();
 
             if ( qtdClientes == 0)
@@ -42,7 +56,7 @@ namespace Aula_06.SERVICES
             {
                 foreach(Cliente cliente in listaClientes)
                 {
-                    builder.AppendLine($"nome:{cliente.Nome} Telefone: {cliente.Fone} Id :{cliente.Id}");
+                    builder.AppendLine($"(nome):{cliente.Nome} (Telefone): {cliente.Fone} (Id) :{cliente.Id}");
                 }
 
             }
@@ -60,7 +74,7 @@ namespace Aula_06.SERVICES
             }
             else if(valido == true)
             {
-                financeiro.DeleteCliente(idCliente);
+                consumidor.DeleteCliente(idCliente);
             }
             else
             {
@@ -78,7 +92,7 @@ namespace Aula_06.SERVICES
 
             if(valida == true)
             {
-                financeiro.UpdateCliente(new Cliente(idCliente,nome,fone));                    
+                consumidor.UpdateCliente(new Cliente(idCliente,nome,fone));                    
             }
             else
             {
@@ -92,7 +106,7 @@ namespace Aula_06.SERVICES
         public string BuscarCliente(int idCliente)
         {
             var builder = new StringBuilder();
-            var listaClientes = financeiro.GetAllCliente();
+            var listaClientes = consumidor.GetAllCliente();
             var valida =  Validar(idCliente);
 
              if (valida == true)
@@ -101,7 +115,7 @@ namespace Aula_06.SERVICES
                 {
                     if(idCliente == cliente.Id)
                     {
-                     builder.AppendLine($"nome:{cliente.Nome} Telefone: {cliente.Fone} Id :{cliente.Id}");   
+                     builder.AppendLine($"(Nome):{cliente.Nome} (Telefone): {cliente.Fone} (Id ):{cliente.Id}");   
                     }
                 }
 

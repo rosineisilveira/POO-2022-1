@@ -6,7 +6,8 @@ namespace Aula_06.CONTROLLERS
 {
     public class MenuCobranca
     {
-        CobrancaServices controle = new CobrancaServices();
+        ClienteServices controle = new ClienteServices();
+        ContaServices controleConta = new ContaServices();
 
         public void Menu()
         {
@@ -19,6 +20,10 @@ namespace Aula_06.CONTROLLERS
                 Console.WriteLine("DIGITE 3 PARA REMOVER UM CLIENTE");
                 Console.WriteLine("DIGITE 4 PARA ALTERAR DADOS DE UM CLIENTE");
                 Console.WriteLine("DIGITE 5 PARA BUSCAR DADOS DE UM CLIENTE");
+                Console.WriteLine("DIGITE 6 PARA ADICIONAR UMA CONTA A UM CLIENTE");
+                Console.WriteLine("DIGITE 7 PARA ADICIONAR A DATA DE PAGAMENTO DE UMA CONTA");
+                Console.WriteLine("DIGITE 8 PARA LISTAR AS CONTAS DE UM CLIENTE");
+
                 Console.WriteLine("DIGITE 0 PARA SAIR DA APLICAÇÃO");
 
                 op = Console.ReadLine();
@@ -87,6 +92,60 @@ namespace Aula_06.CONTROLLERS
                         int idCliente = int.Parse(Console.ReadLine());
                         string busca = controle.BuscarCliente (idCliente);
                         Console.WriteLine(busca);
+                        Console.WriteLine("---------------------------------------------------------------");
+
+                        break;
+
+                    case "6" :
+
+                        Console.WriteLine("Digite ID do cliente");
+                        int idC = int.Parse(Console.ReadLine());
+
+                        Console.WriteLine("Digite id da conta");
+                        int idConta = int.Parse(Console.ReadLine());
+
+                        Console.WriteLine("Digite a data da emissão");
+                        DateTime dataEmissao = DateTime.Parse(Console.ReadLine());
+
+                        Console.WriteLine("Digite a data de vencimento");
+                        DateTime dataVenc = DateTime.Parse(Console.ReadLine());
+
+                        Console.WriteLine("Digite o valor");
+                        decimal valor = decimal.Parse(Console.ReadLine());
+
+                        string cobranca = controleConta.CreateConta(idC,idConta,dataEmissao,dataVenc,valor);
+                        
+                        Console.WriteLine(cobranca);
+                        Console.WriteLine("---------------------------------------------------------------");
+
+                        break;
+
+                     case "7" :
+
+                        Console.WriteLine("Digite o id do cliente");
+                        int idPagCliente = int.Parse(Console.ReadLine());
+
+                        Console.WriteLine("Digite o id da conta");
+                        int idPagConta = int.Parse(Console.ReadLine());
+
+                        Console.WriteLine("Digite a data de pagamento");
+                        DateTime dataPag = DateTime.Parse(Console.ReadLine());
+
+
+                        string pagamento = controleConta.AtualizarConta (idPagCliente,idPagConta,dataPag);
+                        Console.WriteLine(pagamento);
+                        Console.WriteLine("---------------------------------------------------------------");
+
+                        break;
+
+                    case "8" :
+
+                        Console.WriteLine("Digite o id do cliente");
+                        int idContaCliente = int.Parse(Console.ReadLine());
+                        string buscar = controle.BuscarCliente (idContaCliente);
+                        Console.WriteLine(buscar);
+
+                        Console.WriteLine(controleConta.BuscarConta(idContaCliente));
                         Console.WriteLine("---------------------------------------------------------------");
 
                         break;
