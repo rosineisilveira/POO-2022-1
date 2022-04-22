@@ -18,6 +18,7 @@ namespace Aula_06.DATA
         public void SaveConta(Conta conta)
         {
             Contas.Add(conta);
+           
         }
         public Conta GetByIdConta(int idConta)
         {

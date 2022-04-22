@@ -25,11 +25,22 @@ namespace Aula_06.SERVICES
         }
 
         public string CreateConta(int idCliente,int idConta, DateTime dataEmissao, DateTime dataVenc, decimal valor)
-        {    
-               
-            cobrancas.SaveConta(new Conta(idCliente,idConta,dataEmissao,dataVenc,valor));
-                    
-            return "Add com sucesso";   
+        {   
+            /*var client = consumidor.GetByIdCliente(idCliente);
+             if(client == null)
+             {
+                 return "Cliente nao encontrado";
+             }
+             else
+             {
+                 cobrancas.SaveConta(new Conta(idCliente,idConta,dataEmissao,dataVenc,valor));
+                 return "Add com sucesso";   
+             } >>>>>>>>nao consegui fazer validação!!!!!*/
+
+             cobrancas.SaveConta(new Conta(idCliente,idConta,dataEmissao,dataVenc,valor));
+
+             return "Add com sucesso";
+
         }
         public string ListContas(int idCliente)
         {
