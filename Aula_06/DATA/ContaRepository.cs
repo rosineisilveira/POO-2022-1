@@ -9,6 +9,7 @@ namespace Aula_06.DATA
     {
          private List<Conta> Contas = new List<Conta>();
          private List<Cliente> ContasClientes = new List<Cliente>();
+        
 
          public List<Conta> GetAllConta()
         {
@@ -21,13 +22,13 @@ namespace Aula_06.DATA
         public Conta GetByIdConta(int idConta)
         {
             
-            return Contas.Find(p => p.Id == idConta );    
+            return Contas.Find(p => p.IdConta == idConta );    
 
         }
         public Conta GetByIdContaCliente(int idCliente)
         {
             
-            return Contas.Find(p => p.Id == idCliente );    
+            return Contas.Find(p => p.IdCliente == idCliente );    
 
         }
          public void UpdateConta(Conta conta)
@@ -48,7 +49,7 @@ namespace Aula_06.DATA
         }
          public bool ValidationConta(int idCliente)
         {
-             return ContasClientes.Any(p => p.Id ==idCliente );
+             return Contas.Any(p => p.IdCliente ==idCliente );
         }
         
 

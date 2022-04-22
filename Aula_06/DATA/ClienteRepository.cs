@@ -7,7 +7,6 @@ namespace Aula_06.DATA
     public class ClienteRepository
     {
         private List<Cliente>ListaDeClientes = new List<Cliente>();
-        //private List<Conta>contaCliente = new List<Conta>();
 
         public List<Cliente> GetAllCliente()
         {

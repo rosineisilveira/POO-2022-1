@@ -9,36 +9,28 @@ namespace Aula_06.SERVICES
     {
         ClienteRepository consumidor = new ClienteRepository();
         
-
         public  bool Validar( int idCliente )
         {
             return consumidor.ValidationCliente(idCliente);
         }
-
         public int TamanholistaCliente()
         {
            return consumidor.GetAllCliente().Count ;
         }
        
-
         public string CreateCliente(int id ,string nome,string fone)
         {
-            var validando = consumidor.ValidationCliente(id);
-            
+            var validando = Validar(id);            
                 {
                     if(validando == false)
                     {
                        consumidor.SaveCliente(new Cliente(id,nome,fone));
-
                     }
                     else
                     {
                         return " ID já utilizado,tente outro !!!";
                     }
                 }
-
-           
-
             return "Add com sucesso";   
         }
 
@@ -86,10 +78,8 @@ namespace Aula_06.SERVICES
 
         public string AtualizarCliente(int idCliente,String nome,string fone )
         {
-
             var valida =  Validar(idCliente);
            
-
             if(valida == true)
             {
                 consumidor.UpdateCliente(new Cliente(idCliente,nome,fone));                    
@@ -99,8 +89,7 @@ namespace Aula_06.SERVICES
                 return "Cliente não encontrado";
             }
        
-            return "Atualizado com sucesso";
-           
+            return "Atualizado com sucesso";           
 
         }
         public string BuscarCliente(int idCliente)
@@ -118,17 +107,12 @@ namespace Aula_06.SERVICES
                      builder.AppendLine($"(Nome):{cliente.Nome} (Telefone): {cliente.Fone} (Id ):{cliente.Id}");   
                     }
                 }
-
             }
             else
             {
                 return "Cliente nao encontrado";
             }
             return builder.ToString();
-        }
-        
-
+        }       
     }
-
-
 }

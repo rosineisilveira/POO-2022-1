@@ -23,6 +23,7 @@ namespace Aula_06.CONTROLLERS
                 Console.WriteLine("DIGITE 6 PARA ADICIONAR UMA CONTA A UM CLIENTE");
                 Console.WriteLine("DIGITE 7 PARA ADICIONAR A DATA DE PAGAMENTO DE UMA CONTA");
                 Console.WriteLine("DIGITE 8 PARA LISTAR AS CONTAS DE UM CLIENTE");
+                Console.WriteLine("DIGITE 9 PARA REMOVER UMA CONTA");
 
                 Console.WriteLine("DIGITE 0 PARA SAIR DA APLICAÇÃO");
 
@@ -142,10 +143,22 @@ namespace Aula_06.CONTROLLERS
 
                         Console.WriteLine("Digite o id do cliente");
                         int idContaCliente = int.Parse(Console.ReadLine());
-                        string buscar = controle.BuscarCliente (idContaCliente);
+                        string buscar = controleConta.ListContas (idContaCliente);
                         Console.WriteLine(buscar);
+                        Console.WriteLine("---------------------------------------------------------------");
 
-                        Console.WriteLine(controleConta.BuscarConta(idContaCliente));
+                        break;
+
+                     case "9" :
+
+                        Console.WriteLine("Digite o id do cliente");
+                        int idClienteRemove = int.Parse(Console.ReadLine());
+
+                        Console.WriteLine("Digite o id dA conta");
+                        int idContaRemove = int.Parse(Console.ReadLine());
+
+                        string removerConta = controleConta.RemoveConta (idClienteRemove,idContaRemove);
+                        Console.WriteLine(removerConta);
                         Console.WriteLine("---------------------------------------------------------------");
 
                         break;

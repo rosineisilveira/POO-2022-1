@@ -6,25 +6,25 @@ namespace Aula_06.DOMAIN
     
     public class Conta
     {
-        public Conta( int idCliente, int id,DateTime dataEmissao, DateTime dataVenc, decimal valor)
+        public Conta( int idCliente,int idConta, DateTime dataEmissao, DateTime dataVenc, decimal valor)
         {
             IdCliente = idCliente;
-            Id = id;
+            IdConta = idConta;
             DataEmissao = dataEmissao;
             DataVenc = dataVenc;
             Valor = valor;
             
         }
-        public Conta ( int idCliente,int id,DateTime dataPag)
+        public Conta ( int idCliente,int idConta,DateTime dataPag)
         {
             IdCliente = idCliente;
-            Id = id;
+            IdConta = idConta;
             DataPag = dataPag;
 
         }
         
          public int IdCliente;
-        public int Id { get; set; }
+        public int IdConta { get; set; }
         public DateTime DataEmissao { get; set; }
         public DateTime DataVenc { get; set; }
         public decimal Valor { get; set; }

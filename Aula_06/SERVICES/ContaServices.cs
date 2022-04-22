@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Aula_06.DATA;
 using Aula_06.DOMAIN;
@@ -9,8 +11,9 @@ namespace Aula_06.SERVICES
     public class ContaServices
     {
         ContaRepository cobrancas = new ContaRepository();
+        ClienteRepository consumidor = new ClienteRepository();
         
-
+        
          public  bool Validar( int idCliente )
         {
             return cobrancas.ValidationConta(idCliente);
@@ -21,21 +24,11 @@ namespace Aula_06.SERVICES
            return cobrancas.GetAllConta().Count ;
         }
 
-        public string CreateConta(int idCliente,int id ,DateTime dataEmissao, DateTime dataVenc, decimal valor)
-        {
-            var valida =  Validar(idCliente);
-           
-
-            if(valida != true)
-            {
-                cobrancas.SaveConta(new Conta(idCliente,id,dataEmissao,dataVenc,valor));
-             
-            }
-            else
-            {
-                return "Cliente não encontrado";
-            }
-
+        public string CreateConta(int idCliente,int idConta, DateTime dataEmissao, DateTime dataVenc, decimal valor)
+        {    
+               
+            cobrancas.SaveConta(new Conta(idCliente,idConta,dataEmissao,dataVenc,valor));
+                    
             return "Add com sucesso";   
         }
         public string ListContas(int idCliente)
@@ -44,7 +37,7 @@ namespace Aula_06.SERVICES
             var listaContas = cobrancas.GetAllConta();
             var qtdContas = TamanholistaConta();
 
-            if ( qtdContas == 0)
+           if ( qtdContas == 0)
             {
                 Console.WriteLine("Lista vazia");
             }
@@ -52,16 +45,24 @@ namespace Aula_06.SERVICES
             {
                 foreach(Conta conta in listaContas)
                 {
-                    builder.AppendLine($" Id : {conta.IdCliente} ClienteId: {conta.Id} Data Emissão :{conta.DataEmissao} Data Vencimento : {conta.DataVenc}Valor :{conta.Valor} Data de pagamento : {conta.DataPag}" );
+                     if(idCliente == conta.IdCliente)
+                     {
+                         builder.AppendLine($" (ClienteId) : {conta.IdCliente} (IdConta): {conta.IdConta} (Data Emissão) :{conta.DataEmissao} (Data Vencimento) : {conta.DataVenc} (Valor) :{conta.Valor} (Data de pagamento) : {conta.DataPag}" );
+                     }
+                     else
+                     {
+                         return "Lista de contas vazia";
+                     }
+                       
                 }
 
             }
             return builder.ToString();
         }
 
-        public string RemoveConta(int idConta)
+        public string RemoveConta(int idCliente,int idConta)
         {
-            var valido = Validar(idConta);
+            var valido = Validar(idCliente);
             
             var qtdContas = TamanholistaConta();
 
@@ -71,7 +72,7 @@ namespace Aula_06.SERVICES
             }
             else if(valido == true)
             {
-                cobrancas.DeleteConta(idConta);
+                cobrancas.DeleteConta(idConta);   
             }
             else
             {
@@ -82,10 +83,7 @@ namespace Aula_06.SERVICES
         }
         public string AtualizarConta(int idCliente, int idConta,DateTime dataPag )
         {
-
             var valida =  Validar(idCliente);
-           
-
             if(valida == true)
             {
                 cobrancas.UpdateConta(new Conta(idCliente,idConta,dataPag));                    
@@ -96,31 +94,7 @@ namespace Aula_06.SERVICES
             }
        
             return "Atualizado com sucesso";
-           
-
         }
-         public string BuscarConta(int idCliente)
-        {
-            var builder = new StringBuilder();
-            var listaContas = cobrancas.GetAllConta();
-            var valida =  Validar(idCliente);
-
-             if (valida == true)
-            {
-                foreach(Conta conta in listaContas)
-                {
-                    if(idCliente == conta.IdCliente)
-                    {
-                        builder.AppendLine($" (Id): {conta.Id} (Data Emissão) :{conta.DataEmissao} (Data Vencimento) : {conta.DataVenc} (Valor ):{conta.Valor} (Data de pagamento) : {conta.DataPag}" );
-                    }
-                }
-
-            }
-            else
-            {
-                return "Conta não encontrada";
-            }
-            return builder.ToString();   
-        }
+        
     }
 }
