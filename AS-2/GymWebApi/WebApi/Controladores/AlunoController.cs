@@ -4,7 +4,6 @@ using Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.DTO.AlunoDTO;
 using WebApi.ViewModel.AlunoViewModel;
-
 namespace WebApi.Controllers;
 
 [ApiController]
@@ -112,7 +111,5 @@ namespace WebApi.Controllers;
             _repository.Update(aluno);
             await _unitOfWork.CommitAsync();
             return Ok(aluno);
-        }
-
-        
+        }   
     }
