@@ -12,15 +12,19 @@ namespace WebApi.Controllers;
     public class MatriculaController : ControllerBase
     {
         private readonly IMatriculaRepository _repository;
+        private readonly ITreinoRepository _treinoRepository;
+
         private readonly IUnitOfWork _unitOfWork;
 
         public MatriculaController(
                 IMatriculaRepository MatriculaRepository,
+                ITreinoRepository TreinoRepository,
                 IUnitOfWork unitOfWork
         )
         {
             this._repository = MatriculaRepository;
             this._unitOfWork = unitOfWork;
+            this._treinoRepository = TreinoRepository;
         }
 
         [HttpPost()]
@@ -32,8 +36,8 @@ namespace WebApi.Controllers;
             
                Status = model.Status,
                AlunoId = model.AlunoId,
-               PlanoId = model.PlanoId,
-               TreinoId = model.TreinoId,
+               PlanoId= model.PlanoId,
+               DataCadastro = model.DataCadastro,
 
             };
 
@@ -120,4 +124,34 @@ namespace WebApi.Controllers;
             await _unitOfWork.CommitAsync();
             return Ok(matricula);
         }
+
+        [HttpPatch("/TreinoToMatricula")] 
+        public async Task<IActionResult> TreinoToMatriculaAsync([FromBody]InsertTreinoMatriculaViewModel model)
+        {
+            var matricula = await _repository.GetByIdAsync(model.MatriculaId);
+
+            if(matricula == null)
+            {
+                return NotFound();
+            }
+            var treinosSearch = new List<Treino>();
+            foreach(var treino in model.Treinos)
+            {
+                var treinoSearch = await _treinoRepository.GetByIdAsync(treino.TreinoId);
+                treinosSearch.Add(treinoSearch);
+            }
+            if (treinosSearch.Count == 0)
+            {
+                 return Ok(new
+            {
+                message = "Treino nao encontrado!!"
+            });
+            }
+            matricula.Treinos = treinosSearch;
+            _repository.Update(matricula);
+            await _unitOfWork.CommitAsync();
+            return Ok();
+
     }
+
+}

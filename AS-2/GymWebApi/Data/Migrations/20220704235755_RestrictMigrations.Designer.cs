@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220704030620_AlunoMigrations")]
-    partial class AlunoMigrations
+    [Migration("20220704235755_RestrictMigrations")]
+    partial class RestrictMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,9 +25,6 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
                         .HasColumnName("id");
-
-                    b.Property<int>("MatriculaId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -101,6 +98,7 @@ namespace Data.Migrations
             modelBuilder.Entity("Domain.Entities.Matricula", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
                         .HasColumnName("id");
 
@@ -127,6 +125,9 @@ namespace Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AlunoId")
+                        .IsUnique();
 
                     b.HasIndex("PagamentoId");
 
@@ -236,15 +237,15 @@ namespace Data.Migrations
                 {
                     b.HasOne("Domain.Entities.Aluno", "Aluno")
                         .WithOne("Matricula")
-                        .HasForeignKey("Domain.Entities.Matricula", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("Domain.Entities.Matricula", "AlunoId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("FK_Matricula_Aluno");
 
                     b.HasOne("Domain.Entities.Pagamento", "Pagamento")
                         .WithMany("Matriculas")
                         .HasForeignKey("PagamentoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("FK_Matricula_Pagamento");
 

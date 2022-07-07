@@ -3,6 +3,7 @@ using System;
 using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220704233444_errorMigrations")]
+    partial class errorMigrations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.3");
@@ -118,6 +120,9 @@ namespace Data.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(true)
                         .HasColumnName("status");
+
+                    b.Property<int>("TreinoId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -233,14 +238,14 @@ namespace Data.Migrations
                     b.HasOne("Domain.Entities.Aluno", "Aluno")
                         .WithOne("Matricula")
                         .HasForeignKey("Domain.Entities.Matricula", "AlunoId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_Matricula_Aluno");
 
                     b.HasOne("Domain.Entities.Pagamento", "Pagamento")
                         .WithMany("Matriculas")
                         .HasForeignKey("PagamentoId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_Matricula_Pagamento");
 

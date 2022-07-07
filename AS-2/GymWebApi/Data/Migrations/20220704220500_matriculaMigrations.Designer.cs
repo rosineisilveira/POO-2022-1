@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220704025242_MatMigrations")]
-    partial class MatMigrations
+    [Migration("20220704220500_matriculaMigrations")]
+    partial class matriculaMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -98,6 +98,7 @@ namespace Data.Migrations
             modelBuilder.Entity("Domain.Entities.Matricula", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
                         .HasColumnName("id");
 
@@ -124,6 +125,9 @@ namespace Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AlunoId")
+                        .IsUnique();
 
                     b.HasIndex("PagamentoId");
 
@@ -199,21 +203,6 @@ namespace Data.Migrations
                     b.ToTable("treino", (string)null);
                 });
 
-            modelBuilder.Entity("matricula_treino", b =>
-                {
-                    b.Property<int>("matricula_id")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("treino_id")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("matricula_id", "treino_id");
-
-                    b.HasIndex("treino_id");
-
-                    b.ToTable("matricula_treino");
-                });
-
             modelBuilder.Entity("treino_exercicio", b =>
                 {
                     b.Property<int>("exercicio_id")
@@ -229,11 +218,26 @@ namespace Data.Migrations
                     b.ToTable("treino_exercicio");
                 });
 
+            modelBuilder.Entity("treino_matricula", b =>
+                {
+                    b.Property<int>("matricula_id")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("treino_id")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("matricula_id", "treino_id");
+
+                    b.HasIndex("treino_id");
+
+                    b.ToTable("treino_matricula");
+                });
+
             modelBuilder.Entity("Domain.Entities.Matricula", b =>
                 {
                     b.HasOne("Domain.Entities.Aluno", "Aluno")
                         .WithOne("Matricula")
-                        .HasForeignKey("Domain.Entities.Matricula", "Id")
+                        .HasForeignKey("Domain.Entities.Matricula", "AlunoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_Matricula_Aluno");
@@ -250,7 +254,7 @@ namespace Data.Migrations
                         .HasForeignKey("PlanoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("FK_Matricula_Mensalidade");
+                        .HasConstraintName("FK_Matricula_plano");
 
                     b.Navigation("Aluno");
 
@@ -271,23 +275,6 @@ namespace Data.Migrations
                     b.Navigation("Instrutor");
                 });
 
-            modelBuilder.Entity("matricula_treino", b =>
-                {
-                    b.HasOne("Domain.Entities.Matricula", null)
-                        .WithMany()
-                        .HasForeignKey("matricula_id")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_matricula_treino_matricula_id");
-
-                    b.HasOne("Domain.Entities.Treino", null)
-                        .WithMany()
-                        .HasForeignKey("treino_id")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_matricula_treino_treino_id");
-                });
-
             modelBuilder.Entity("treino_exercicio", b =>
                 {
                     b.HasOne("Domain.Entities.Exercicio", null)
@@ -303,6 +290,23 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("FK_treino_exercicio_treino_id");
+                });
+
+            modelBuilder.Entity("treino_matricula", b =>
+                {
+                    b.HasOne("Domain.Entities.Matricula", null)
+                        .WithMany()
+                        .HasForeignKey("matricula_id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_treino_matricula_matricula_id");
+
+                    b.HasOne("Domain.Entities.Treino", null)
+                        .WithMany()
+                        .HasForeignKey("treino_id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_treino_matricula_treino_id");
                 });
 
             modelBuilder.Entity("Domain.Entities.Aluno", b =>

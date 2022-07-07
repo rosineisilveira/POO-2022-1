@@ -14,6 +14,6 @@ namespace Domain.Entities
         public Pagamento Pagamento { get; set; }
         public int PagamentoId { get; set; }
         public IList<Treino> Treinos { get; set; }
-        public int TreinoId { get; set; }
+
     }
 }

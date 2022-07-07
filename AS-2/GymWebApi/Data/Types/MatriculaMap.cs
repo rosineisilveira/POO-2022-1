@@ -30,14 +30,14 @@ namespace Data.Types
             builder.HasOne(i => i.Aluno)
                 .WithOne(i => i.Matricula)
                 .HasConstraintName("FK_Matricula_Aluno")
-                .HasForeignKey<Matricula>(i => i.Id)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey<Matricula>(i => i.AlunoId)
+                .OnDelete(DeleteBehavior.Restrict);
 
 
             builder.HasOne(i => i.Pagamento)
                 .WithMany(i => i.Matriculas)
                 .HasConstraintName("FK_Matricula_Pagamento")
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.Plano)
                 .WithMany(x => x.Matriculas)

@@ -13,7 +13,7 @@ namespace WebApi.DTO.MatriculaDTO
         
         public Pagamento Pagamento { get; set; }
 
-        //public int TreinoId { get; set; }
+        public int TreinoId { get; set; }
 
        public IList<Treino> Treinos { get; set; }
     }

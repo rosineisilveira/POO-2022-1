@@ -4,28 +4,25 @@
 
 namespace Data.Migrations
 {
-    public partial class MatMigrations : Migration
+    public partial class RestrictMigrations : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
+                name: "FK_Matricula_Aluno",
+                table: "matricula");
+
+            migrationBuilder.DropForeignKey(
                 name: "FK_Matricula_Pagamento",
                 table: "matricula");
 
-            migrationBuilder.RenameColumn(
-                name: "MensalidadeId",
+            migrationBuilder.AddForeignKey(
+                name: "FK_Matricula_Aluno",
                 table: "matricula",
-                newName: "PlanoId");
-
-            migrationBuilder.RenameIndex(
-                name: "IX_matricula_MensalidadeId",
-                table: "matricula",
-                newName: "IX_matricula_PlanoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_matricula_PagamentoId",
-                table: "matricula",
-                column: "PagamentoId");
+                column: "AlunoId",
+                principalTable: "aluno",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Matricula_Pagamento",
@@ -33,33 +30,31 @@ namespace Data.Migrations
                 column: "PagamentoId",
                 principalTable: "pagamento",
                 principalColumn: "id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
+                name: "FK_Matricula_Aluno",
+                table: "matricula");
+
+            migrationBuilder.DropForeignKey(
                 name: "FK_Matricula_Pagamento",
                 table: "matricula");
 
-            migrationBuilder.DropIndex(
-                name: "IX_matricula_PagamentoId",
-                table: "matricula");
-
-            migrationBuilder.RenameColumn(
-                name: "PlanoId",
+            migrationBuilder.AddForeignKey(
+                name: "FK_Matricula_Aluno",
                 table: "matricula",
-                newName: "MensalidadeId");
-
-            migrationBuilder.RenameIndex(
-                name: "IX_matricula_PlanoId",
-                table: "matricula",
-                newName: "IX_matricula_MensalidadeId");
+                column: "AlunoId",
+                principalTable: "aluno",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Matricula_Pagamento",
                 table: "matricula",
-                column: "id",
+                column: "PagamentoId",
                 principalTable: "pagamento",
                 principalColumn: "id",
                 onDelete: ReferentialAction.Cascade);

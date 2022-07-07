@@ -25,7 +25,7 @@ namespace Data.Repositories
             
             if(matricula == null )
                 return false;
-            else if(matricula.Status == true)
+           else if(matricula.Status == true)
                 return false;
             else
             {

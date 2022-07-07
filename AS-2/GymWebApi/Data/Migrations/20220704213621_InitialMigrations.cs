@@ -104,11 +104,12 @@ namespace Data.Migrations
                 name: "matricula",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "INTEGER", nullable: false),
+                    id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     data_cadastro = table.Column<DateTime>(type: "SMALLDATETIME", nullable: false),
                     status = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: true),
                     AlunoId = table.Column<int>(type: "INTEGER", nullable: false),
-                    MensalidadeId = table.Column<int>(type: "INTEGER", nullable: false),
+                    PlanoId = table.Column<int>(type: "INTEGER", nullable: false),
                     PagamentoId = table.Column<int>(type: "INTEGER", nullable: false),
                     TreinoId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -117,22 +118,22 @@ namespace Data.Migrations
                     table.PrimaryKey("PK_matricula", x => x.id);
                     table.ForeignKey(
                         name: "FK_Matricula_Aluno",
-                        column: x => x.id,
+                        column: x => x.AlunoId,
                         principalTable: "aluno",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Matricula_Mensalidade",
-                        column: x => x.MensalidadeId,
-                        principalTable: "plano",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Matricula_Pagamento",
-                        column: x => x.id,
+                        column: x => x.PagamentoId,
                         principalTable: "pagamento",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Matricula_plano",
+                        column: x => x.PlanoId,
+                        principalTable: "plano",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -160,7 +161,7 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "matricula_treino",
+                name: "treino_matricula",
                 columns: table => new
                 {
                     matricula_id = table.Column<int>(type: "INTEGER", nullable: false),
@@ -168,31 +169,7 @@ namespace Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_matricula_treino", x => new { x.matricula_id, x.treino_id });
-                    table.ForeignKey(
-                        name: "FK_matricula_treino_matricula_id",
-                        column: x => x.matricula_id,
-                        principalTable: "matricula",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_matricula_treino_treino_id",
-                        column: x => x.treino_id,
-                        principalTable: "treino",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "treino_matriculas",
-                columns: table => new
-                {
-                    matricula_id = table.Column<int>(type: "INTEGER", nullable: false),
-                    treino_id = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_treino_matriculas", x => new { x.matricula_id, x.treino_id });
+                    table.PrimaryKey("PK_treino_matricula", x => new { x.matricula_id, x.treino_id });
                     table.ForeignKey(
                         name: "FK_treino_matricula_matricula_id",
                         column: x => x.matricula_id,
@@ -208,14 +185,20 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_matricula_MensalidadeId",
+                name: "IX_matricula_AlunoId",
                 table: "matricula",
-                column: "MensalidadeId");
+                column: "AlunoId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_matricula_treino_treino_id",
-                table: "matricula_treino",
-                column: "treino_id");
+                name: "IX_matricula_PagamentoId",
+                table: "matricula",
+                column: "PagamentoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_matricula_PlanoId",
+                table: "matricula",
+                column: "PlanoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_treino_instrutor_id",
@@ -228,21 +211,18 @@ namespace Data.Migrations
                 column: "treino_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_treino_matriculas_treino_id",
-                table: "treino_matriculas",
+                name: "IX_treino_matricula_treino_id",
+                table: "treino_matricula",
                 column: "treino_id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "matricula_treino");
-
-            migrationBuilder.DropTable(
                 name: "treino_exercicio");
 
             migrationBuilder.DropTable(
-                name: "treino_matriculas");
+                name: "treino_matricula");
 
             migrationBuilder.DropTable(
                 name: "exercicio");
@@ -257,10 +237,10 @@ namespace Data.Migrations
                 name: "aluno");
 
             migrationBuilder.DropTable(
-                name: "plano");
+                name: "pagamento");
 
             migrationBuilder.DropTable(
-                name: "pagamento");
+                name: "plano");
 
             migrationBuilder.DropTable(
                 name: "instrutor");
