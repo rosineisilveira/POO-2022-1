@@ -10,7 +10,7 @@ namespace Domain.Entities
         
          [JsonIgnore]
         public Matricula Matricula { get; set; }
-        //public int MatriculaId { get; set; }
+        
 
     }
 }

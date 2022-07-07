@@ -3,7 +3,6 @@ using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.DTO.TreinoDTO;
-using WebApi.ViewModel.ManyToManyViewModel;
 using WebApi.ViewModel.TreinoViewModel;
 
 namespace WebApi.Controllers;
@@ -39,7 +38,6 @@ namespace WebApi.Controllers;
             
                 Nome = model.Nome,
                 InstrutorId = model.InstrutorId,
-                ExercicioId = model.ExercicioId,
 
             };
 
@@ -120,8 +118,7 @@ namespace WebApi.Controllers;
 
             treino.Nome = model.Nome;
             treino.InstrutorId = model.InstrutorId;
-            treino.Exercicios = model.Exercicios;
-
+    
             _repository.Update(treino);
             await _unitOfWork.CommitAsync();
             return Ok(treino);
@@ -129,67 +126,40 @@ namespace WebApi.Controllers;
 
         //relacionamentos
 
-        [HttpPost("/treinoToExercicio")]
+        [HttpPatch("/ExercicioToTreino")]
 
-         public async Task<IActionResult> PostTreinoExercicioAsync([FromBody]AddTreinoExercicioViewModel model)
+         public async Task<IActionResult> ExercicioToTreinoAsync([FromBody]ExercicioTreinoViewModel model)
          {
-             Treino treino = await _repository.GetByIdAsync(model.TreinoId);
-             Exercicio exercicio = await _exercicioRepository.GetByIdAsync(model.ExercicioId);
 
-                if (treino == null)
-                {
-                    return NotFound();
-                }
+             var treino = await _repository.GetByIdAsync(model.TreinoId);
 
-                if (exercicio == null)
-                {
-                    return NotFound();
-                }
-
-                if (treino.Exercicios == null)
-                {
-                    treino.Exercicios = new List<Exercicio>();
-                }
-
-                treino.Exercicios.Add(exercicio);
-                _repository.Update(treino);
-                await _unitOfWork.CommitAsync();
-
-                return Ok(treino);
+            if(treino == null)
+            {
+                return NotFound();
+            }
+            var exerciciosSearch = new List<Exercicio>();
+            foreach(var exercicio in model.Exercicios)
+            {
+                var exercicioSearch = await _exercicioRepository.GetByIdAsync(exercicio.ExercicioId);
+                exerciciosSearch.Add(exercicioSearch);
+            }
+            if (exerciciosSearch.Count == 0)
+            {
+                 return Ok(new
+            {
+                message = "Exercicio nao encontrado!!"
+            });
+            }
+            treino.Exercicios = exerciciosSearch;
+            _repository.Update(treino);
+            await _unitOfWork.CommitAsync();
+            return Ok();
 
          }
-        [HttpPost("/treinoToMatricula")]
-
-         public async Task<IActionResult> PostTreinoMatriculaAsync([FromBody]AddMatriculaTreinoViewModel model)
-         {
-             Treino treino = await _repository.GetByIdAsync(model.TreinoId);
-             Matricula matricula = await _matriculaRepository.GetByIdAsync(model.MatriculaId);
-
-                if (treino == null)
-                {
-                    return NotFound();
-                }
-
-                if (matricula == null)
-                {
-                    return NotFound();
-                }
-
-                if (treino.Matriculas == null)
-                {
-                    treino.Matriculas = new List<Matricula>();
-                }
-
-                treino.Matriculas.Add(matricula);
-                _repository.Update(treino);
-                await _unitOfWork.CommitAsync();
-
-                return Ok(treino);
-
-         }
+       
 
         [HttpDelete("/RemoveExercicioTreino")]
-        public async Task<IActionResult> DeleteExercicio([FromBody]AddTreinoExercicioViewModel  model)
+        public async Task<IActionResult> DeleteExercicio([FromBody]RemoveExercicioTreinoViewModel  model)
         {
             Treino treino = await _repository.GetByIdAsync(model.TreinoId);
             Exercicio exercicio = await _exercicioRepository.GetByIdAsync(model.ExercicioId);
@@ -211,7 +181,7 @@ namespace WebApi.Controllers;
             return Ok(treino);
         }
 
-        [HttpDelete("/RemoveMatriculaTreino")]
+        /*[HttpDelete("/RemoveMatriculaTreino")]
         public async Task<IActionResult> DeleteMatricula([FromBody]AddMatriculaTreinoViewModel  model)
         {
             Treino treino = await _repository.GetByIdAsync(model.TreinoId);
@@ -232,5 +202,5 @@ namespace WebApi.Controllers;
             await _unitOfWork.CommitAsync();
 
             return Ok(treino);
-        }
+        }*/
     }

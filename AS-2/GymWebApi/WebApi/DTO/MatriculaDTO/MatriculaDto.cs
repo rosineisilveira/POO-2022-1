@@ -4,6 +4,7 @@ namespace WebApi.DTO.MatriculaDTO
 {
     public class MatriculaDto
     {
+        public int Id { get; set; }
         public DateTime  DataCadastro { get; set; }
         public bool Status { get; set; }
 
@@ -12,8 +13,6 @@ namespace WebApi.DTO.MatriculaDTO
         public Plano Plano { get; set; }
         
         public Pagamento Pagamento { get; set; }
-
-        public int TreinoId { get; set; }
 
        public IList<Treino> Treinos { get; set; }
     }

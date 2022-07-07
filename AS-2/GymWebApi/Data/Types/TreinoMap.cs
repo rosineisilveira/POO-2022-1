@@ -31,7 +31,7 @@ namespace Data.Types
             builder.HasOne(x => x.Instrutor)
                 .WithMany(x => x.Treinos)
                 .HasConstraintName("FK_Treino_Instrutor")
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder
                 .HasMany(i => i.Exercicios)
@@ -43,7 +43,7 @@ namespace Data.Types
                         .WithMany()
                         .HasForeignKey("exercicio_id")
                         .HasConstraintName("FK_treino_exercicio_exercicio_id")
-                        .OnDelete(DeleteBehavior.Restrict),
+                        .OnDelete(DeleteBehavior.Cascade),
                     treino => treino
                         .HasOne<Treino>()
                         .WithMany()

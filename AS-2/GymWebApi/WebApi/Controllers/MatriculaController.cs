@@ -37,6 +37,7 @@ namespace WebApi.Controllers;
                Status = model.Status,
                AlunoId = model.AlunoId,
                PlanoId= model.PlanoId,
+               PagamentoId = model.PagamentoId,
                DataCadastro = model.DataCadastro,
 
             };
@@ -58,10 +59,12 @@ namespace WebApi.Controllers;
             {
                 var matriculaDto = new MatriculaDto()
                 {
+                    Id = matricula.Id,
                     Status = matricula.Status,
                     Aluno = matricula.Aluno,
                     Plano = matricula.Plano,
-                    Treinos = matricula.Treinos,   
+                    Treinos = matricula.Treinos, 
+                    Pagamento = matricula.Pagamento,  
                 };
 
                 matriculasDto.Add(matriculaDto);
@@ -73,7 +76,7 @@ namespace WebApi.Controllers;
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id,[FromBody]Matricula matricula)
+        public async Task<IActionResult> DeleteAsync([FromBody]int id)
         {
            
            var matriculaDel = _repository.Delete(id);
@@ -101,10 +104,12 @@ namespace WebApi.Controllers;
             {
                 var matriculaDto = new MatriculaDto()
                 {
+                    Id = matricula.Id,
                     Status = matricula.Status,
                     Aluno = matricula.Aluno,
                     Plano = matricula.Plano,
                     Treinos = matricula.Treinos,
+                    Pagamento = matricula.Pagamento
                 };
                 return Ok(matriculaDto);
             }
@@ -124,6 +129,8 @@ namespace WebApi.Controllers;
             await _unitOfWork.CommitAsync();
             return Ok(matricula);
         }
+
+        //relacionamentos
 
         [HttpPatch("/TreinoToMatricula")] 
         public async Task<IActionResult> TreinoToMatriculaAsync([FromBody]InsertTreinoMatriculaViewModel model)
@@ -152,6 +159,29 @@ namespace WebApi.Controllers;
             await _unitOfWork.CommitAsync();
             return Ok();
 
-    }
+        }
+
+        [HttpDelete("/RemoveTreinoMatricula")]
+        public async Task<IActionResult> DeleteTreino([FromBody]RemoveTreinoMatriculaViewModel  model)
+        {
+            Treino treino = await _treinoRepository.GetByIdAsync(model.TreinoId);
+            Matricula matricula = await _repository.GetByIdAsync(model.MatriculaId);
+
+            if (treino == null)
+            {
+                return NotFound();
+            }
+
+            if (matricula == null)
+            {
+                return NotFound();
+            }
+
+            matricula.Treinos.Remove(treino);
+            _repository.Update(matricula);
+            await _unitOfWork.CommitAsync();
+
+            return Ok(treino);
+        }
 
 }

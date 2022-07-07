@@ -68,7 +68,7 @@ namespace WebApi.Controllers;
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id,[FromBody]Pagamento pagamento)
+        public async Task<IActionResult> DeleteAsync([FromBody]int id)
         {
            
            var pagamentoDel = _repository.Delete(id);

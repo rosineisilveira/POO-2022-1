@@ -37,14 +37,18 @@ namespace Data.Repositories
         public async Task<IList<Matricula>> GetAllAsync()
         {
              return await _context.DbSetMatricula.Include(i => i.Aluno)
-                                                    .Include(i => i.Treinos)
-                                                    .ToListAsync();
+                                                 .Include(i => i.Treinos)
+                                                 .Include(i => i.Pagamento)
+                                                 .Include(i => i.Plano)
+                                                 .ToListAsync();
         }
 
         public async Task<Matricula> GetByIdAsync(int matriculaId)
         {
             return await _context.DbSetMatricula.Include(i => i.Aluno)
                                                 .Include(i => i.Treinos)
+                                                .Include(i => i.Pagamento)
+                                                .Include(i => i.Plano)
                                                 .FirstOrDefaultAsync(x => x.Id == matriculaId);
         }
 

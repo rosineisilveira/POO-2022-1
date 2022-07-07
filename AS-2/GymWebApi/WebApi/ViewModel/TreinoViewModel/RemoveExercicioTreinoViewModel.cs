@@ -1,6 +1,6 @@
-namespace WebApi.ViewModel.ManyToManyViewModel
+namespace WebApi.ViewModel.TreinoViewModel
 {
-    public class AddTreinoExercicioViewModel
+    public class RemoveExercicioTreinoViewModel
     {
         public int TreinoId { get; set; }
         public int ExercicioId { get; set; }

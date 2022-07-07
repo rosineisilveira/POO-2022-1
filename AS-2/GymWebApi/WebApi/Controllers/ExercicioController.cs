@@ -69,7 +69,7 @@ namespace WebApi.Controllers;
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id,[FromBody]Exercicio exercicio)
+        public async Task<IActionResult> DeleteAsync([FromBody]int id)
         {
            
            var exercicioDel = _repository.Delete(id);

@@ -9,6 +9,6 @@ namespace WebApi.ViewModel.TreinoViewModel
         public Instrutor Instrutor { get; set; }
         public int InstrutorId { get; set; }
 
-        public IList<Exercicio> Exercicios { get; set; }
+      
     }
 }

@@ -1,6 +1,6 @@
-namespace WebApi.ViewModel.ManyToManyViewModel
+namespace WebApi.ViewModel.MatriculaViewModel
 {
-    public class AddMatriculaTreinoViewModel
+    public class RemoveTreinoMatriculaViewModel
     {
         public int MatriculaId { get; set; }
         public int TreinoId { get; set; }
